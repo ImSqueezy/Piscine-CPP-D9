@@ -7,11 +7,14 @@
 # include <sstream>
 
 struct Data {
-    int     btc;
-    float   er; // exchange_rate
+    float     btc;
+    float     er;
     int     year;
     int     month;
     int     day;
+    bool    valid_input = 1;
+	bool	valid_btc = 1;
+	bool	valid_data = 1;
 };
 
 #endif
