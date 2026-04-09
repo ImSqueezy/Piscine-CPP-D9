@@ -29,6 +29,9 @@ bool	BitcoinExchange::isValidDate(const std::string& date) const {
 	std::istringstream(date.substr(5, 2)) >> month;
 	std::istringstream(date.substr(8, 2)) >> day;
 
+	if (year < _min_year || year > _max_year)
+		return false;
+
 	if (month < 1 || month > 12 || day < 1 || day > 31)
 		return false;
 
@@ -74,6 +77,8 @@ bool	BitcoinExchange::loadDatabase(const std::string& filename) {
 
 	std::string line;
 	std::getline(file, line);
+	_min_year = 9999;
+	_max_year = 0;
 	while (std::getline(file, line)) {
 		size_t commaPos = line.find(',');
 		if (commaPos == std::string::npos)
@@ -81,6 +86,12 @@ bool	BitcoinExchange::loadDatabase(const std::string& filename) {
 
 		std::string date = line.substr(0, commaPos);
 		std::string rateStr = line.substr(commaPos + 1);
+
+		int	year = std::atoi(line.substr(0, 4).c_str());
+		if (year < _min_year)
+			_min_year = year;
+		if (year > _max_year)
+			_max_year = year;
 
 		float rate;
 		std::istringstream(rateStr) >> rate;

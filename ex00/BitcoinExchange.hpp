@@ -9,7 +9,9 @@
 
 class	BitcoinExchange {
 	private:
-		std::map<std::string, float> database;
+		std::map<std::string, float>	database;
+		int								_min_year;
+		int								_max_year;	
 
 		bool    isValidDate(const std::string& date) const;
 		bool    isValidValue(const std::string& value, float& val) const;
