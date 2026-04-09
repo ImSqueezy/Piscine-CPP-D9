@@ -10,7 +10,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(COMPILE) $(OBJS) -o $(NAME)
 
-%.o:%.c BitcoinExchange.hpp
+%.o: %.cpp BitcoinExchange.hpp
 	$(COMPILE) -c $< -o $@
 
 clean:
