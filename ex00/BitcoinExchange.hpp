@@ -3,18 +3,22 @@
 
 # include <iostream>
 # include <fstream>
-# include <vector>
+# include <map>
 # include <sstream>
+# include <cstdlib>
 
-struct Data {
-    float     btc;
-    float     er;
-    int     year;
-    int     month;
-    int     day;
-    bool    valid_input = 1;
-	bool	valid_btc = 1;
-	bool	valid_data = 1;
+class	BitcoinExchange {
+	private:
+		std::map<std::string, float> database;
+
+    public:
+		BitcoinExchange();
+		BitcoinExchange(const BitcoinExchange& other);
+		BitcoinExchange& operator=(const BitcoinExchange& other);
+		~BitcoinExchange();
+
+		bool    loadDatabase(const std::string& filename);
+		void    processInput(const std::string& filename);
 };
 
 #endif
