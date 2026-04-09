@@ -55,6 +55,16 @@ bool	BitcoinExchange::isValidValue(const std::string& value, float& val) const {
 	return (*endptr == '\0');
 }
 
+float BitcoinExchange::getExchangeRate(const std::string& date) const {
+	std::map<std::string, float>::const_iterator it = database.lower_bound(date);
+	if (it != database.end() && it->first == date)
+		return it->second;
+	if (it == database.begin())
+		return it->second;
+	--it;
+    return it->second;
+}
+
 bool	BitcoinExchange::loadDatabase(const std::string& filename) {
 	std::ifstream file(filename.c_str());
 	if (!file.is_open()) {
@@ -125,6 +135,8 @@ void	BitcoinExchange::processInput(const std::string& filename) {
 			continue;
 		}
 
+		float rate = getExchangeRate(date);
+		std::cout << date << " => " << val << " = " << (val * rate) << std::endl;
 	}
 	file.close();
 }
