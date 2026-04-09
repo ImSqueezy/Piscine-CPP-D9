@@ -15,6 +15,46 @@ BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other) {
 
 BitcoinExchange::~BitcoinExchange() {}
 
+bool	BitcoinExchange::isValidDate(const std::string& date) const {
+	if (date.length() != 10 || date[4] != '-' || date[7] != '-')
+		return false;
+
+	for (int i = 0; i < 10; ++i) {
+		if (i == 4 || i == 7) continue;
+		if (!isdigit(date[i])) return false;
+	}
+
+	int	year, month, day;
+	std::istringstream(date.substr(0, 4)) >> year;
+	std::istringstream(date.substr(5, 2)) >> month;
+	std::istringstream(date.substr(8, 2)) >> day;
+
+	if (month < 1 || month > 12 || day < 1 || day > 31)
+		return false;
+
+	if (month == 4 || month == 6 || month == 9 || month == 11) {
+		if (day > 30)
+			return false;
+	}
+
+	if (month == 2) {
+		bool isLeap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+		if (day > (isLeap ? 29 : 28))
+		return false;
+	}
+	return true;
+}
+
+bool	BitcoinExchange::isValidValue(const std::string& value, float& val) const {
+	if (value.empty() || value.find_first_not_of(" \t\r\n") == std::string::npos)
+		return false;
+	char* endptr;
+	val = strtof(value.c_str(), &endptr);
+	while (*endptr != '\0' && isspace(*endptr))
+		endptr++;
+	return (*endptr == '\0');
+}
+
 bool	BitcoinExchange::loadDatabase(const std::string& filename) {
 	std::ifstream file(filename.c_str());
 	if (!file.is_open()) {
@@ -60,11 +100,31 @@ void	BitcoinExchange::processInput(const std::string& filename) {
 		}
 
 		std::string	date = line.substr(0, pipePos);
-		// Trim trailing spaces from date for validation
 		size_t		last = date.find_last_not_of(" \t\r\n");
 		if (last != std::string::npos)
 			date = date.substr(0, last + 1);
-		std::cout << "date: " << date << std::endl;
+
+		if (!isValidDate(date)) {
+			std::cout << "Error: bad input => " << date << std::endl;
+			continue;
+		}
+
+		std::string valStr = line.substr(pipePos + 1);
+		float val;
+		if (!isValidValue(valStr, val)) {
+			std::cout << "Error: bad input => " << valStr << std::endl;
+			continue;
+		}
+		
+		if (val < 0) {
+			std::cout << "Error: not a positive number." << std::endl;
+			continue;
+		}
+		if (val > 1000) {
+			std::cout << "Error: too large a number." << std::endl;
+			continue;
+		}
+
 	}
 	file.close();
 }
