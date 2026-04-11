@@ -20,11 +20,29 @@ bool	RPN::isOperator(char c) const {
 }
 
 bool	RPN::applyOperator(char op) {
-	(void)op;
 	if (_stack.size() < 2) {
-		std::cerr << "Error" << std::endl;
+		std::cerr << "Error: Second Operand needed!" << std::endl;
 		return false;
 	}
+	int	b, a, result;
+	b = _stack.top();
+	_stack.pop();
+	a = _stack.top();
+	_stack.pop();
+	if (op == '+')
+	 	result = a + b;
+	else if (op == '-')
+	 	result = a - b;
+	else if (op == '*')
+	 	result = a * b;
+	else {
+		if (b == 0) {
+			std::cerr << "Error: Division by zero!" << std::endl;
+			return false;
+		}
+	 	result = a / b;
+	}
+	_stack.push(result);
 	return true;
 }
 
@@ -33,13 +51,9 @@ bool	RPN::evaluate(const std::string& expression) {
 	std::string			token;
 
 	while (iss >> token) {
-		std::cout << token << std::endl;
 		if (token.length() == 1 && isdigit(token[0]))
 			_stack.push(token[0] - '0');
 		else if (token.length() == 1 && isOperator(token[0])) {
-			// it would return false if:
-			//  - the stack size is less than 2
-			//  - division by zero
 			if (!applyOperator(token[0]))
 				return false;
 		} else {
@@ -47,5 +61,6 @@ bool	RPN::evaluate(const std::string& expression) {
 			return false;
 		}
 	}
+	std::cout << _stack.top() << std::endl;
 	return true;
 }
