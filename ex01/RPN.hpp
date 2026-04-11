@@ -1,18 +1,21 @@
-#ifndef RNP_hPP
-#define RNP_hPP
+#ifndef RPN_hPP
+#define RPN_hPP
 
 # include <iostream>
-// enables pop() push() top() size() and empty()
 # include <stack>
+# include <sstream>
 
-class RNP {
+class RPN {
 	private:
 		std::stack<int>	_stack;
+
+		bool	isOperator(char c) const;
+		bool	applyOperator(char op);
 	public:
-		RNP();
-		RNP(const RNP& other);
-		RNP& operator=(const RNP& other);
-		~RNP();
+		RPN();
+		RPN(const RPN& other);
+		RPN& operator=(const RPN& other);
+		~RPN();
 
 		bool evaluate(const std::string& expression);
 };
