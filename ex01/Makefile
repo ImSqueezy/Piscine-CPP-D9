@@ -1,7 +1,7 @@
 NAME = RPN
 FLAGS = -Wall -Wextra -Werror -std=c++98
 COMPILE = c++ $(FLAGS)
-SRCS = main.cpp RNP.cpp
+SRCS = main.cpp RPN.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 all: $(NAME)
@@ -9,7 +9,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(COMPILE) $(OBJS) -o $(NAME)
 
-%.o:%.cpp RNP.hpp
+%.o:%.cpp RPN.hpp
 	$(COMPILE) -c $< -o $@
 
 clean:
