@@ -1,6 +1,6 @@
 FLAGS = -Wall -Wextra -Werror -std=c++98
 COMPILE = c++ $(FLAGS)
-NAME = btc
+NAME = PmergeMe
 
 SRCS = main.cpp PmergeMe.cpp
 OBJS = $(SRCS:%.cpp=%.o)
