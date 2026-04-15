@@ -20,17 +20,25 @@ Usage:
 ```
 
 ## ex01/
+Reverse Polish Notation! This exercice requires having a program that evaluates a notation passed from it's param, and apply the RPN if it's valid, or return an error to the standard error if not.
 
 Usage:
 ```bash
+./RPN
 ```
 
 ## ex02/
+Lastly, ex02/ is about sorting a set of numbers using the merge-sort Algorithm and compare it between to STL containers.
 
 Usage:
 ```bash
+./PmergeMe
 ```
 
 # Resources
 - [istringstream in cpp](https://iq.opengenus.org/istringstream-in-cpp/)
 - [Parsing table data in cpp](https://codesignal.com/learn/courses/parsing-table-data-in-cpp/lessons/parsing-csv-files-and-converting-strings-to-integers-in-cpp)
+- [Computerphile - Binary Search](https://www.youtube.com/watch?v=hDn8iOc30Tk)
+- [Reverse Polish Notation](https://medium.com/@interviewbuddies/reverse-polish-notation-b88524252960)
+- [What you will need by leske42 (Related to this)](https://github.com/leske42/CPP09?tab=readme-ov-file#what-you-will-need)
+- [Jacobsthal Sequence](https://www.geeksforgeeks.org/dsa/jacobsthal-and-jacobsthal-lucas-numbers/)
