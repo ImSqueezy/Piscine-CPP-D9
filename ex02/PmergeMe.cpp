@@ -2,42 +2,45 @@
 
 PmergeMe::PmergeMe() {}
 
-PmergeMe::PmergeMe(const PmergeMe &src) {
-    *this = src;
-}
+PmergeMe::PmergeMe(const PmergeMe &src) { *this = src; }
 
 PmergeMe &PmergeMe::operator=(const PmergeMe &src) {
-    if (this != &src) {
-        this->_vec = src._vec;
-        this->_deq = src._deq;
-    }
-    return *this;
+	if (this != &src) { _vec = src._vec; _deq = src._deq; }
+	return *this;
 }
-
 PmergeMe::~PmergeMe() {}
 
-void	PmergeMe::parseInput(int ac, char** av) {
+void PmergeMe::parseInput(int ac, char** av) {
 	for (int i = 1; i < ac; ++i) {
-		std::istringstream	iss(av[i]);
-		int					n;
-		if (!(iss >> n) || n < 0)
-			throw std::runtime_error("Error: invalid input");
-		std::string leftover;
-		if (iss >> leftover)
-			throw std::runtime_error("Error: invalid input");
-		_vec.push_back(n);
-		_deq.push_back(n);
+		std::istringstream iss(av[i]);
+		int n;
+		std::string s;
+		if (!(iss >> n) || n < 0 || (iss >> s)) throw std::runtime_error("Error: invalid input");
+		_vec.push_back(n); _deq.push_back(n);
 	}
 }
 
-void	PmergeMe::sort() {
-	// view what's in _vec and _deq
-	std::cout << "_deq has: " << std::endl;
-	for (std::deque<int>::iterator it = _deq.begin(); it != _deq.end(); ++it) {
-		std::cout << *it << std::endl;
-	}
-	std::cout << "_vec has: " << std::endl;
-	for (std::vector<int>::iterator it = _vec.begin(); it != _vec.end(); ++it) {
-		std::cout << *it << std::endl;
-	}
+void PmergeMe::sort() {
+	std::cout << "Before: ";
+	for (size_t i = 0; i < _vec.size(); ++i)
+		std::cout << (i ? " " : "") << _vec[i];
+	std::cout << "\n";
+
+	std::clock_t s1 = std::clock();
+	mergeInsertionSortVec(_vec);
+	std::clock_t e1 = std::clock();
+
+	std::clock_t s2 = std::clock();
+	mergeInsertionSortDeq(_deq);
+	std::clock_t e2 = std::clock();
+
+	std::cout << "After: ";
+	for (size_t i = 0; i < _vec.size(); ++i)
+		std::cout << (i ? " " : "") << _vec[i];
+	std::cout << "\n";
+
+	std::cout << "Time to process a range of " << _vec.size()
+				<< " elements with std::vector : " << (double)(e1 - s1) / CLOCKS_PER_SEC * 1e6 << " us\n";
+	std::cout << "Time to process a range of " << _deq.size()
+				<< " elements with std::deque  : " << (double)(e2 - s2) / CLOCKS_PER_SEC * 1e6 << " us\n";
 }
