@@ -6,21 +6,25 @@
 # include <deque>
 # include <sstream>
 # include <stdexcept>
+# include <ctime>
+# include <algorithm>
+# include <iterator>
 
-class PmergeMe
-{
+class PmergeMe {
 	private:
-		std::vector<int>	_vec;
-		std::deque<int>		_deq;
+		std::vector<int> _vec;
+		std::deque<int> _deq;
 
-    public:
-    	PmergeMe();
-    	PmergeMe(const PmergeMe &src);
-    	PmergeMe &operator=(const PmergeMe &src);
-    	~PmergeMe();
+		void mergeInsertionSortVec(std::vector<int>& seq);
+		void mergeInsertionSortDeq(std::deque<int>& seq);
+	public:
+		PmergeMe();
+		PmergeMe(const PmergeMe &src);
+		PmergeMe &operator=(const PmergeMe &src);
+		~PmergeMe();
 
-		void	parseInput(int ac, char** av);
-		void	sort();
+		void parseInput(int ac, char** av);
+		void sort();
 };
 
 #endif
