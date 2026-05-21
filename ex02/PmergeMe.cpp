@@ -54,11 +54,13 @@ void	PmergeMe::mergeInsertionSortVec(std::vector<int>& seq) {
 	std::vector<std::pair<int, int> > pairs;
 	for (int i = 0; i < n; i += 2) {
 		int a = seq[i], b = seq[i+1];
-		if (a < b) std::swap(a, b);
+		if (a < b)
+			std::swap(a, b);
 		pairs.push_back(std::make_pair(a, b));
 	}
 	std::vector<int> largers;
-	for (size_t i = 0; i < pairs.size(); ++i) largers.push_back(pairs[i].first);
+	for (size_t i = 0; i < pairs.size(); ++i)
+		largers.push_back(pairs[i].first);
 	mergeInsertionSortVec(largers);
 	std::vector<std::pair<int, int> > sortedPairs;
 	for (size_t i = 0; i < largers.size(); ++i) {
@@ -110,11 +112,13 @@ void	PmergeMe::mergeInsertionSortDeq(std::deque<int>& seq) {
 	std::vector<std::pair<int, int> > pairs;
 	for (int i = 0; i < n; i += 2) {
 		int a = seq[i], b = seq[i+1];
-		if (a < b) std::swap(a, b);
+		if (a < b)
+			std::swap(a, b);
 		pairs.push_back(std::make_pair(a, b));
 	}
 	std::deque<int> largers;
-	for (size_t i = 0; i < pairs.size(); ++i) largers.push_back(pairs[i].first);
+	for (size_t i = 0; i < pairs.size(); ++i)
+		largers.push_back(pairs[i].first);
 	mergeInsertionSortDeq(largers);
 	std::vector<std::pair<int, int> > sortedPairs;
 	for (size_t i = 0; i < largers.size(); ++i) {
