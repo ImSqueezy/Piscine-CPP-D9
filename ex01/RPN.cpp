@@ -61,6 +61,10 @@ bool	RPN::evaluate(const std::string& expression) {
 			return false;
 		}
 	}
+	if (token.empty() || _stack.size() != 1) {
+		std::cerr << "Error: Invalid expression!" << std::endl;
+		return false;
+	}
 	std::cout << _stack.top() << std::endl;
 	return true;
 }
