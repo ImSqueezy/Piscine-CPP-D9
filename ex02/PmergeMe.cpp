@@ -85,10 +85,11 @@ void	PmergeMe::mergeInsertionSortVec(std::vector<int>& seq) {
 	for (size_t k = 0; k < order.size(); ++k) {
 		int idx = order[k], val = pend[idx], hi = pPos[idx];
 		std::vector<int>::iterator it = std::lower_bound(chain.begin(), chain.begin() + hi, val);
-		int pos = std::distance(chain.begin(), it);
+		int dis = std::distance(chain.begin(), it);
+
 		chain.insert(it, val);
 		for (size_t j = 0; j < pPos.size(); ++j)
-			if (pPos[j] >= pos) ++pPos[j];
+			if (pPos[j] >= dis) ++pPos[j];
 	}
 	if (odd)
 		chain.insert(std::lower_bound(chain.begin(), chain.end(), strag), strag);
@@ -142,11 +143,11 @@ void	PmergeMe::mergeInsertionSortDeq(std::deque<int>& seq) {
 	for (size_t k = 0; k < order.size(); ++k) {
 		int idx = order[k], val = pend[idx], hi = pPos[idx];
 		std::deque<int>::iterator it = std::lower_bound(chain.begin(), chain.begin() + hi, val);
-		int pos = std::distance(chain.begin(), it);
+		int dis = std::distance(chain.begin(), it);
 
 		chain.insert(it, val);
 		for (size_t j = 0; j < pPos.size(); ++j)
-			if (pPos[j] >= pos) ++pPos[j];
+			if (pPos[j] >= dis) ++pPos[j];
 	}
 	if (odd)
 		chain.insert(std::lower_bound(chain.begin(), chain.end(), strag), strag);
