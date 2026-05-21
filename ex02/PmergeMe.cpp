@@ -8,6 +8,7 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &src) {
 	if (this != &src) { _vec = src._vec; _deq = src._deq; }
 	return *this;
 }
+
 PmergeMe::~PmergeMe() {}
 
 void PmergeMe::parseInput(int ac, char** av) {
@@ -15,8 +16,11 @@ void PmergeMe::parseInput(int ac, char** av) {
 		std::istringstream iss(av[i]);
 		int n;
 		std::string s;
-		if (!(iss >> n) || n < 0 || (iss >> s)) throw std::runtime_error("Error: invalid input");
-		_vec.push_back(n); _deq.push_back(n);
+
+		if (!(iss >> n) || n < 0 || (iss >> s))
+			throw std::runtime_error("Error: invalid input");
+		_vec.push_back(n);
+		_deq.push_back(n);
 	}
 }
 
@@ -39,11 +43,13 @@ static std::vector<int> generateJacobsthalOrder(int n) {
 	return order;
 }
 
-void PmergeMe::mergeInsertionSortVec(std::vector<int>& seq) {
+void	PmergeMe::mergeInsertionSortVec(std::vector<int>& seq) {
 	int n = seq.size();
-	if (n <= 1) return;
+	if (n <= 1)
+		return;
 	bool odd = n % 2;
 	int strag = 0;
+	
 	if (odd) { strag = seq.back(); seq.pop_back(); --n; }
 	std::vector<std::pair<int, int> > pairs;
 	for (int i = 0; i < n; i += 2) {
@@ -72,7 +78,8 @@ void PmergeMe::mergeInsertionSortVec(std::vector<int>& seq) {
 	for (size_t i = 1; i < sortedPairs.size(); ++i) pend.push_back(sortedPairs[i].second);
 	
 	std::vector<int> pPos(pend.size());
-	for (size_t i = 0; i < pend.size(); ++i) pPos[i] = i + 2;
+	for (size_t i = 0; i < pend.size(); ++i)
+		pPos[i] = i + 2;
 
 	std::vector<int> order = generateJacobsthalOrder(pend.size());
 	for (size_t k = 0; k < order.size(); ++k) {
@@ -80,18 +87,25 @@ void PmergeMe::mergeInsertionSortVec(std::vector<int>& seq) {
 		std::vector<int>::iterator it = std::lower_bound(chain.begin(), chain.begin() + hi, val);
 		int pos = std::distance(chain.begin(), it);
 		chain.insert(it, val);
-		for (size_t j = 0; j < pPos.size(); ++j) if (pPos[j] >= pos) ++pPos[j];
+		for (size_t j = 0; j < pPos.size(); ++j)
+			if (pPos[j] >= pos) ++pPos[j];
 	}
-	if (odd) chain.insert(std::lower_bound(chain.begin(), chain.end(), strag), strag);
+	if (odd)
+		chain.insert(std::lower_bound(chain.begin(), chain.end(), strag), strag);
 	seq = chain;
 }
 
-void PmergeMe::mergeInsertionSortDeq(std::deque<int>& seq) {
+void	PmergeMe::mergeInsertionSortDeq(std::deque<int>& seq) {
 	int n = seq.size();
-	if (n <= 1) return;
+	if (n <= 1)
+		return;
 	bool odd = n % 2;
 	int strag = 0;
-	if (odd) { strag = seq.back(); seq.pop_back(); --n; }
+
+	if (odd) {
+		strag = seq.back();
+		seq.pop_back(); --n;
+	}
 	std::vector<std::pair<int, int> > pairs;
 	for (int i = 0; i < n; i += 2) {
 		int a = seq[i], b = seq[i+1];
@@ -113,20 +127,29 @@ void PmergeMe::mergeInsertionSortDeq(std::deque<int>& seq) {
 	}
 	std::deque<int> chain;
 	chain.push_back(sortedPairs[0].second);
-	for (size_t i = 0; i < sortedPairs.size(); ++i) chain.push_back(sortedPairs[i].first);
+	for (size_t i = 0; i < sortedPairs.size(); ++i)
+		chain.push_back(sortedPairs[i].first);
+
 	std::vector<int> pend;
-	for (size_t i = 1; i < sortedPairs.size(); ++i) pend.push_back(sortedPairs[i].second);
+	for (size_t i = 1; i < sortedPairs.size(); ++i)
+		pend.push_back(sortedPairs[i].second);
+
 	std::vector<int> pPos(pend.size());
-	for (size_t i = 0; i < pend.size(); ++i) pPos[i] = i + 2;
+	for (size_t i = 0; i < pend.size(); ++i)
+		pPos[i] = i + 2;
+
 	std::vector<int> order = generateJacobsthalOrder(pend.size());
 	for (size_t k = 0; k < order.size(); ++k) {
 		int idx = order[k], val = pend[idx], hi = pPos[idx];
 		std::deque<int>::iterator it = std::lower_bound(chain.begin(), chain.begin() + hi, val);
 		int pos = std::distance(chain.begin(), it);
+
 		chain.insert(it, val);
-		for (size_t j = 0; j < pPos.size(); ++j) if (pPos[j] >= pos) ++pPos[j];
+		for (size_t j = 0; j < pPos.size(); ++j)
+			if (pPos[j] >= pos) ++pPos[j];
 	}
-	if (odd) chain.insert(std::lower_bound(chain.begin(), chain.end(), strag), strag);
+	if (odd)
+		chain.insert(std::lower_bound(chain.begin(), chain.end(), strag), strag);
 	seq = chain;
 }
 
