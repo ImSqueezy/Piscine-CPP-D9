@@ -26,9 +26,12 @@ void PmergeMe::parseInput(int ac, char** av) {
 
 static std::vector<int> generateJacobsthalOrder(int n) {
 	std::vector<int> jac, order;
-	if (n <= 0) return order;
-	jac.push_back(1); jac.push_back(3);
-	while (jac.back() < n) jac.push_back(jac[jac.size() - 1] + 2 * jac[jac.size() - 2]);
+	if (n <= 0)
+		return order;
+	jac.push_back(1);
+	jac.push_back(3);
+	while (jac.back() < n)
+		jac.push_back(jac[jac.size() - 1] + 2 * jac[jac.size() - 2]);
 	std::vector<bool> used(n, false);
 	int prev = 0;
 	for (size_t k = 0; k < jac.size(); ++k) {
@@ -37,9 +40,13 @@ static std::vector<int> generateJacobsthalOrder(int n) {
 			if (!used[idx - 1]) { order.push_back(idx - 1); used[idx - 1] = true; }
 		}
 		prev = jac[k];
-		if (prev >= n) break;
+		if (prev >= n)
+			break;
 	}
-	for (int i = 0; i < n; ++i) if (!used[i]) order.push_back(i);
+	for (int i = 0; i < n; ++i) {
+		if (!used[i])
+			order.push_back(i);
+	}
 	return order;
 }
 
