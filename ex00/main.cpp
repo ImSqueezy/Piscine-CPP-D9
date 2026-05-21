@@ -10,6 +10,10 @@ int main(int ac, char **av) {
     if (!btc.loadDatabase("data.csv"))
         return 1;
     
-    btc.processInput(av[1]);
+    try {
+        btc.processInput(av[1]);
+    } catch (std::exception &e) {
+        std::cout << e.what() << std::endl;
+    }
     return 0;
 }

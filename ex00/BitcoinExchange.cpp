@@ -101,6 +101,26 @@ bool	BitcoinExchange::loadDatabase(const std::string& filename) {
 	return true;
 }
 
+static void head_checker(std::string &line)
+{
+    std::istringstream ss(line); 
+
+    std::string date;
+    std::string pipe;
+    std::string value;
+
+    ss >> date >> pipe >> value;
+    if (!ss.eof())
+        throw std::runtime_error("Error head");
+
+    if (date != "date")
+        throw std::runtime_error("Error head");
+    if (pipe != "|")
+        throw std::runtime_error("Error head");
+    if (value != "value")
+        throw std::runtime_error("Error head");
+}
+
 void	BitcoinExchange::processInput(const std::string& filename) {
 	std::ifstream file(filename.c_str());
 	if (!file.is_open()) {
@@ -110,6 +130,7 @@ void	BitcoinExchange::processInput(const std::string& filename) {
 
 	std::string	line;
 	std::getline(file, line);
+	head_checker(line);
 	while (std::getline(file, line)) {
 		if (line.empty())
 			continue;
