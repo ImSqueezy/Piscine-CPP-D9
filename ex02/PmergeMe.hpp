@@ -22,7 +22,7 @@ class PmergeMe {
 			int		n = seq.size();
 
 			if (n <= 1)
-				return 0;
+				return ;
 			int		strag = 0;
 			bool	odd = n % 2;
 
@@ -42,13 +42,14 @@ class PmergeMe {
 					std::swap(first, second);
 				pairs.push_back(std::make_pair(first, second));
 			}
-			std::vector<std::pair<int, int> >::iterator it;
 
-			for (it = pairs.begin(); it != pairs.end(); ++it) {
-				std::cout << "first: " << it->first
-						  << ", second: " << it->second
-						  << std::endl;
-			}
+			// Example: pairs [(3,1), (5,2)] → largers [3, 5]
+			Container largers;
+			std::cout << "size here is: " << pairs.size() << std::endl;
+			for (size_t i = 0; i < pairs.size(); ++i)
+				largers.push_back(pairs[i].first);
+
+			mergeInsertionSort(largers);
 
 		}
 
