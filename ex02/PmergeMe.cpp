@@ -1,5 +1,7 @@
 #include "PmergeMe.hpp"
 
+static const double CLOCK_TO_MICROSECONDS = CLOCKS_PER_SEC * 1e6;
+
 PmergeMe::PmergeMe() {}
 
 PmergeMe::PmergeMe(const PmergeMe &src) { *this = src; }
@@ -24,7 +26,7 @@ void PmergeMe::parseInput(int ac, char** av) {
 	}
 }
 
-static std::vector<int> generateJacobsthalOrder(int n) {
+std::vector<int> PmergeMe::generateJacobsthalOrder(int n) {
 	std::vector<int> jac, order;
 	if (n <= 0)
 		return order;
@@ -50,121 +52,6 @@ static std::vector<int> generateJacobsthalOrder(int n) {
 	return order;
 }
 
-void	PmergeMe::mergeInsertionSortVec(std::vector<int>& seq) {
-	int n = seq.size();
-	if (n <= 1)
-		return;
-	bool odd = n % 2;
-	int strag = 0;
-	
-	if (odd) { strag = seq.back(); seq.pop_back(); --n; }
-	std::vector<std::pair<int, int> > pairs;
-	for (int i = 0; i < n; i += 2) {
-		int a = seq[i], b = seq[i+1];
-		if (a < b)
-			std::swap(a, b);
-		pairs.push_back(std::make_pair(a, b));
-	}
-	std::vector<int> largers;
-	for (size_t i = 0; i < pairs.size(); ++i)
-		largers.push_back(pairs[i].first);
-	mergeInsertionSortVec(largers);
-	std::vector<std::pair<int, int> > sortedPairs;
-	for (size_t i = 0; i < largers.size(); ++i) {
-		for (size_t j = 0; j < pairs.size(); ++j) {
-			if (pairs[j].first == largers[i]) {
-				sortedPairs.push_back(pairs[j]);
-				pairs.erase(pairs.begin() + j);
-				break;
-			}
-		}
-	}
-	std::vector<int> chain;
-	chain.push_back(sortedPairs[0].second);
-	for (size_t i = 0; i < sortedPairs.size(); ++i) chain.push_back(sortedPairs[i].first);
-
-	std::vector<int> pend;
-	for (size_t i = 1; i < sortedPairs.size(); ++i) pend.push_back(sortedPairs[i].second);
-	
-	std::vector<int> pPos(pend.size());
-	for (size_t i = 0; i < pend.size(); ++i)
-		pPos[i] = i + 2;
-
-	std::vector<int> order = generateJacobsthalOrder(pend.size());
-	for (size_t k = 0; k < order.size(); ++k) {
-		int idx = order[k], val = pend[idx], hi = pPos[idx];
-		std::vector<int>::iterator it = std::lower_bound(chain.begin(), chain.begin() + hi, val);
-		int dis = std::distance(chain.begin(), it);
-
-		chain.insert(it, val);
-		for (size_t j = 0; j < pPos.size(); ++j)
-			if (pPos[j] >= dis) ++pPos[j];
-	}
-	if (odd)
-		chain.insert(std::lower_bound(chain.begin(), chain.end(), strag), strag);
-	seq = chain;
-}
-
-void	PmergeMe::mergeInsertionSortDeq(std::deque<int>& seq) {
-	int n = seq.size();
-	if (n <= 1)
-		return;
-	bool odd = n % 2;
-	int strag = 0;
-
-	if (odd) {
-		strag = seq.back();
-		seq.pop_back(); --n;
-	}
-	std::vector<std::pair<int, int> > pairs;
-	for (int i = 0; i < n; i += 2) {
-		int a = seq[i], b = seq[i+1];
-		if (a < b)
-			std::swap(a, b);
-		pairs.push_back(std::make_pair(a, b));
-	}
-	std::deque<int> largers;
-	for (size_t i = 0; i < pairs.size(); ++i)
-		largers.push_back(pairs[i].first);
-	mergeInsertionSortDeq(largers);
-	std::vector<std::pair<int, int> > sortedPairs;
-	for (size_t i = 0; i < largers.size(); ++i) {
-		for (size_t j = 0; j < pairs.size(); ++j) {
-			if (pairs[j].first == largers[i]) {
-				sortedPairs.push_back(pairs[j]);
-				pairs.erase(pairs.begin() + j);
-				break;
-			}
-		}
-	}
-	std::deque<int> chain;
-	chain.push_back(sortedPairs[0].second);
-	for (size_t i = 0; i < sortedPairs.size(); ++i)
-		chain.push_back(sortedPairs[i].first);
-
-	std::vector<int> pend;
-	for (size_t i = 1; i < sortedPairs.size(); ++i)
-		pend.push_back(sortedPairs[i].second);
-
-	std::vector<int> pPos(pend.size());
-	for (size_t i = 0; i < pend.size(); ++i)
-		pPos[i] = i + 2;
-
-	std::vector<int> order = generateJacobsthalOrder(pend.size());
-	for (size_t k = 0; k < order.size(); ++k) {
-		int idx = order[k], val = pend[idx], hi = pPos[idx];
-		std::deque<int>::iterator it = std::lower_bound(chain.begin(), chain.begin() + hi, val);
-		int dis = std::distance(chain.begin(), it);
-
-		chain.insert(it, val);
-		for (size_t j = 0; j < pPos.size(); ++j)
-			if (pPos[j] >= dis) ++pPos[j];
-	}
-	if (odd)
-		chain.insert(std::lower_bound(chain.begin(), chain.end(), strag), strag);
-	seq = chain;
-}
-
 void PmergeMe::sort() {
 	std::cout << "Before: ";
 	for (size_t i = 0; i < _vec.size(); ++i)
@@ -172,11 +59,11 @@ void PmergeMe::sort() {
 	std::cout << "\n";
 
 	std::clock_t s1 = std::clock();
-	mergeInsertionSortVec(_vec);
+	mergeInsertionSort(_vec);
 	std::clock_t e1 = std::clock();
 
 	std::clock_t s2 = std::clock();
-	mergeInsertionSortDeq(_deq);
+	mergeInsertionSort(_deq);
 	std::clock_t e2 = std::clock();
 
 	std::cout << "After: ";
@@ -185,7 +72,7 @@ void PmergeMe::sort() {
 	std::cout << "\n";
 
 	std::cout << "Time to process a range of " << _vec.size()
-				<< " elements with std::vector : " << (double)(e1 - s1) / CLOCKS_PER_SEC * 1e6 << " us\n";
+				<< " elements with std::vector : " << (double)(e1 - s1) / CLOCK_TO_MICROSECONDS << " us\n";
 	std::cout << "Time to process a range of " << _deq.size()
-				<< " elements with std::deque  : " << (double)(e2 - s2) / CLOCKS_PER_SEC * 1e6 << " us\n";
+				<< " elements with std::deque  : " << (double)(e2 - s2) / CLOCK_TO_MICROSECONDS << " us\n";
 }
