@@ -9,6 +9,7 @@
 # include <ctime>
 # include <algorithm>
 # include <iterator>
+# include <iomanip>
 
 class PmergeMe {
 	private:
@@ -60,9 +61,6 @@ class PmergeMe {
 			std::vector<int>	pend;
 			for (size_t i = 1; i < sortedPairs.size(); ++i)
 				pend.push_back(sortedPairs[i].second);
-			std::vector<int>	pPos(pend.size());
-			for (size_t i = 0; i < pend.size(); ++i)
-				pPos[i] = i + 2;
 			std::vector<int>	jacobsthalOrder = generateJacobsthalOrder(pend.size());
 			for (size_t i = 0; i < jacobsthalOrder.size(); ++i) {
 				int idx = jacobsthalOrder[i];

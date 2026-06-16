@@ -1,7 +1,5 @@
 #include "PmergeMe.hpp"
 
-static const double CLOCK_TO_MICROSECONDS = CLOCKS_PER_SEC * 1e6;
-
 PmergeMe::PmergeMe() {}
 
 PmergeMe::PmergeMe(const PmergeMe &src) { *this = src; }
@@ -72,7 +70,7 @@ void PmergeMe::sort() {
 	std::cout << "\n";
 
 	std::cout << "Time to process a range of " << _vec.size()
-				<< " elements with std::vector : " << (double)(e1 - s1) / CLOCK_TO_MICROSECONDS << " us\n";
+				<< " elements with std::vector : " << std::fixed << std::setprecision(5) << (double)(e1 - s1) / CLOCKS_PER_SEC * 1e6 << " us\n";
 	std::cout << "Time to process a range of " << _deq.size()
-				<< " elements with std::deque  : " << (double)(e2 - s2) / CLOCK_TO_MICROSECONDS << " us\n";
+				<< " elements with std::deque  : " << std::fixed << std::setprecision(5) << (double)(e2 - s2) / CLOCKS_PER_SEC * 1e6 << " us\n";
 }
