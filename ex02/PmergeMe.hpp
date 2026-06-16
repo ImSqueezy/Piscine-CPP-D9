@@ -15,7 +15,7 @@ class PmergeMe {
 		std::vector<int>	_vec;
 		std::deque<int>		_deq;
 
-		static std::vector<int>	generateJacobsthalOrder(int n);
+		std::vector<int>	generateJacobsthalOrder(int n);
 
 		template<typename Container>
 		void	mergeInsertionSort(Container& seq) {
@@ -45,11 +45,10 @@ class PmergeMe {
 			mergeInsertionSort(largers);
 			std::vector<std::pair<int, int> > sortedPairs;
 			for (size_t i = 0; i < largers.size(); ++i) {
-				// looking for the pair containing this larger element
 				for (size_t j = 0; j < pairs.size(); ++j) {
 					if (pairs[j].first == largers[i]) {
 						sortedPairs.push_back(pairs[j]);
-						pairs.erase(pairs.begin() + j);  // might remove to avoid dups 
+						pairs.erase(pairs.begin() + j);
 						break;
 					}
 				}
@@ -64,7 +63,20 @@ class PmergeMe {
 			std::vector<int>	pPos(pend.size());
 			for (size_t i = 0; i < pend.size(); ++i)
 				pPos[i] = i + 2;
-
+			std::vector<int>	jacobsthalOrder = generateJacobsthalOrder(pend.size());
+			for (size_t i = 0; i < jacobsthalOrder.size(); ++i) {
+				int idx = jacobsthalOrder[i];
+				if (idx >= static_cast<int>(pend.size()))
+					break;
+				int element = pend[idx];
+				typename Container::iterator it = std::upper_bound(chain.begin(), chain.end(), element);
+				chain.insert(it, element);
+			}
+			seq.clear();
+			for (size_t i = 0; i < chain.size(); ++i)
+				seq.push_back(chain[i]);
+			if (odd)
+				seq.insert(std::lower_bound(seq.begin(), seq.end(), strag), strag);
 		}
 
 	public:
