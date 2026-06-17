@@ -111,14 +111,14 @@ static void head_checker(std::string &line)
 
     ss >> date >> pipe >> value;
     if (!ss.eof())
-        throw std::runtime_error("Error head");
+        throw std::runtime_error("Error: bad input => header");
 
     if (date != "date")
-        throw std::runtime_error("Error head");
+        throw std::runtime_error("Error: bad input => header");
     if (pipe != "|")
-        throw std::runtime_error("Error head");
+        throw std::runtime_error("Error: bad input => header");
     if (value != "value")
-        throw std::runtime_error("Error head");
+        throw std::runtime_error("Error: bad input => header");
 }
 
 void	BitcoinExchange::processInput(const std::string& filename) {
